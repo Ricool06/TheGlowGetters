@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond&family=Lato:wght@300;400;700&family=Roboto:wght@300;400;500&display=swap');
+
+:root {
+  --border-color: #DDDEDF;
+  --menu-color: #F0F0F0;
+  --shadow: rgba(0, 0, 0, 0.25);
+  --red: #DF0024;
+  --yellow: #F3C300;
+  --dark-yellow: #997a00;
+  --cyan: #00AC9F;
+  --blue: #1E88E5;
+}
+
+html, body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  font-size: 14px;
+}
+
+h1 {
+  font-size: 32px;
+  font-family: 'Lato', sans-serif;
+  font-weight: bold;
+}
+
+.app {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 0.75fr 1fr;
+  grid-template-rows: repeat(6, auto);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  grid-template-areas:
+    "question             question"
+    "choice               choice"
+    "plot                 plot"
+    "pre-skeleton-caption pre-skeleton"
+    "skeleton-caption     skeleton"
+    "conclusion           conclusion"
+}
+.app > div {
+  height: 100vh;
+  padding: 0 4em;
+  display: flex;
+  align-items:center;
+}
+.app > div > img {
+  width: 90%;
+  border-radius: 8px;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.75), 0 0 2px rgba(0, 0, 0, 0.75);
+}
+.app__question {
+  grid-area: question;
+  background-color: var(--blue);
+  color: #FFFFFF;
+}
+.app__choice {
+  grid-area: choice;
+  background-color: var(--blue);
+  color: #FFFFFF;
+}
+.choice {
+  font-size: 32px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  border: 1px solid #FFFFFF;
+  border-radius: 2px;
+  padding: 8px 32px;
+  margin-right: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  line-height: 64px;
+}
+.app__plot {
+  grid-area: plot;
+}
+.app__pre_skeleton {
+  grid-area: pre-skeleton;
+  background-color: var(--cyan);
+  display: grid !important;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  grid-template-areas:
+    "img"
+}
+.app__pre_skeleton > img:first-child {
+  grid-area: img;
+}
+.app__pre_skeleton > img:last-child {
+  grid-area: img;
+  filter: invert(1) hue-rotate(36deg);
+  opacity: 0.75;
+}
+.app__pre_skeleton_caption {
+  grid-area: pre-skeleton-caption;
+  background-color: var(--cyan);
+  font-family: 'EB Garamond', sans-serif;
+  font-size: 24px;
+  text-align: justify;
+  line-height: 1.5em;
+}
+.app__skeleton {
+  grid-area: skeleton;
+  display: grid !important;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  grid-template-areas:
+    "img"
+}
+.app__skeleton > img:first-child {
+  grid-area: img;
+}
+.app__skeleton > img:last-child {
+  grid-area: img;
+  filter: invert(1);
+  opacity: 0.75;
+}
+.app__skeleton_caption {
+  grid-area: skeleton-caption;
+  font-family: 'EB Garamond', sans-serif;
+  font-size: 24px;
+  text-align: justify;
+  line-height: 1.5em;
+}
+.app__conclusion {
+  grid-area: conclusion;
+  background-color: var(--blue);
+  color: #FFFFFF;
+}
+.logo {
+  width: 70%;
+}

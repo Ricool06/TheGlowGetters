@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>light-graph</title>
+<link rel="stylesheet" href="/style.css">
+<script src="/script.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/http-vue-loader"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+</head>
+<body>
+
+<div class="app">
+  <div class="app__question">
+    <div>
+      <h1>How have geographical networks changed during the COVID-19 pandemic?</h1>
+      <p>
+        <em><b>Light Graph</b></br>
+        By @TheGlowGetters</em>
+      </p>
+    </div>
+  </div>
+  <div class="app__choice">
+    <div>
+      <h1>How has the region around …</h1>
+      <p>
+        <span class="choice" @mousedown="load_region('hubei')">Wuhan</span>
+<!--         <span class="choice" @mousedown="load_region('london')">London</span> -->
+        <span class="choice" @mousedown="load_region('nyc')">New York</span>
+      </p>
+      <h1>… changed during the pandemic?</h1>
+    </div>
+  </div>
+  <div class="app__plot" v-if="region">
+    <vega :region="region"></vega>
+  </div>
+  <div class="app__pre_skeleton" v-if="region">
+    <img :src="original_image_before">
+    <img :src="skeleton_image_before">
+  </div>
+  <div class="app__pre_skeleton_caption" v-if="region">
+    <div>
+      <p>
+        Before the Pandemic human networks across large geographic regions around
+        {{name}} were very connected. There were {{total_isolated_filaments_before}}
+        disconnected networks with an total average clustering of {{total_clustering_before}}.  
+      </p>
+    </div>
+  </div>
+  <div class="app__skeleton" v-if="region">
+    <img :src="original_image">
+    <img :src="skeleton_image_before">
+  </div>
+  <div class="app__skeleton_caption" v-if="region">
+    <div>
+      <p>
+        During the pandemic human networks around {{name}} were disrupted
+        and much less connected. There were {{total_isolated_filaments}} disconnected
+        networks around {{name}} with an total average clustering of {{total_clustering}}.  
+      </p>
+      <p>
+        The number of disconnected networks increased by
+        {{total_isolated_filaments - total_isolated_filaments_before}} and a reduction in the
+        total average clustering by {{total_clustering_before-total_clustering}}.
+      </p>
+    </div>
+  </div>
+  <div class="app__conclusion">
+  <div>
+    <img class="logo" src="https://cdn.glitch.com/6cc3f4d0-45e1-452c-b774-83b1a756e90d%2Fthe-glow-getters-logo-blue.png?v=1590949522949">
+    <p>
+      <em>“Any tool should be useful in the expected way, but a truly great tool lends
+      itself to uses you never expected.”</br>
+      <b>- Eric S. Raymond, The Cathedral and the Bazaar</b></em>
+    </p>
+  </div>
+  </div>
+</div>
+
+</body>
+</html>
