@@ -1,7 +1,8 @@
 # Custom
-**/function.zip
+**/*.zip
 ingest-lambda/**/*.h5
 ingest-lamdba/**/*.jpg
+ingest-lambda/layer/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

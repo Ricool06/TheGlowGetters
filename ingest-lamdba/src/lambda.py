@@ -1,4 +1,3 @@
-import gdal
 import os
 import requests
 from string import Template
@@ -12,7 +11,6 @@ from skimage import feature
 from skimage.filters import gaussian
 from fil_finder import FilFinder2D
 from astropy import units as u
-import scipy.misc
 import numpy as np
 import networkx as nx
 
@@ -125,18 +123,9 @@ def handler(event):
   os.remove(jpg_name + '.aux.xml')
 
 
-
-
-
-
-
-  # translate_command = "gdal_translate -a_nodata 'nan' 'HDF5:VNP46A1.A2020094.h18v04.001.2020121045857.h5://HDFEOS/GRIDS/VNP_Grid_DNB/Data_Fields/DNB_At_Sensor_Radiance_500m' test.jpg"
-  # os.system(translate_command)
-# gdal.Tran
-
-# handler(dict(
-#   label="china test",
-#   year="2020",
-#   day="148",
-#   hv_coords="h29v06"
-# ))
+handler(dict(
+  label="china_test",
+  year="2020",
+  day="148",
+  hv_coords="h29v06"
+))

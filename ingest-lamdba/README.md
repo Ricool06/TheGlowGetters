@@ -1,3 +1,7 @@
+# THIS IS NOT ACTUALLY A LAMBDA
+We tried to reduce the package size to fit in AWS lambda, but even using lambda layers, compression, etc we could not.
+We are still able to ingest data by calling the script locally.
+
 To begin developing:
 * open VSCode
 * install the VSCode Remote: Containers extension
