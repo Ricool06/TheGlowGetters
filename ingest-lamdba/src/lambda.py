@@ -24,16 +24,17 @@ USERAGENT = 'tis/download.py_1.0--' + sys.version.replace('\n','').replace('\r',
 def handler(event):
   # Search for valid file names
   url = Template(baseUrl).safe_substitute(event)
-  response = requests.get(url + '.json')
+  requested_file_name = ''
+  with requests.get(url + '.json') as response:
+    response.raise_for_status()
+    response_body = response.json()
 
-  response_body = response.json()
-
-  found_file_descriptors = list(filter(
-    lambda descriptor: ('name' in descriptor) & (event['hv_coords'] in descriptor['name']),
-    response_body
-  ))
-  
-  requested_file_name = found_file_descriptors[0]['name']
+    found_file_descriptors = list(filter(
+      lambda descriptor: ('name' in descriptor) & (event['hv_coords'] in descriptor['name']),
+      response_body
+    ))
+    
+    requested_file_name = found_file_descriptors[0]['name']
   
   # Prepare to download h5 file
   token = os.environ['LAADS_TOKEN']
@@ -64,9 +65,12 @@ def handler(event):
 
   # Load image into numpy array, then preprocess with blur and edge detection
   img = np.asarray(Image.open(jpg_name)) / 255
-  edges = feature.canny(img, sigma=1).astype(np.float64)
+  edges = feature.canny(img, sigma=2).astype(np.float64)
   edges = gaussian(edges, sigma=3)
   edges = edges.astype(np.float64)
+  # edges = edges[::1200, ::1200]
+  print('HAS NANS:')
+  print(np.isnan(edges).any())
 
   # Load the edge detected image into a filament finder object
   fil = FilFinder2D(edges)
@@ -74,18 +78,24 @@ def handler(event):
   # Preprocess the image by flattening to cap outliers and mask the image so that
   # only the most significant structures are analyzed
   fil.preprocess_image(flatten_percent=95)
+  print('CREATING MASK')
   fil.create_mask(
     adapt_thresh=10.0*u.pix,
     smooth_size=1.0*u.pix,
     size_thresh=500.0*u.pix**2,
     fill_hole_size=1.0*u.pix**2
   )
+  Image.fromarray(fil.mask * 255).convert('L').save('mask.jpg')
+  
 
   # Generate a rough skeleton overlayed on the image
-  fil.medskel()
+  print('CREATING MEDSKEL')
+  fil.medskel(verbose=True, save_png=True)
 
   # Analyze the skeleton to generate a fine-grained graph and networkx graph
+  print('ANALYZING SKELETONS')
   fil.analyze_skeletons(skel_thresh=1.0*u.pix)
+  print('ANALYZED SKELETONS')
 
   skeleton_image_file_name = 'skeleton' + jpg_name
   Image.fromarray(fil.skeleton * 255).convert('L').save(skeleton_image_file_name)
@@ -112,7 +122,11 @@ def handler(event):
       'label': { 'S': event['label'] },
       'original_image': { 'S': jpg_name },
       'skeleton_image': { 'S': skeleton_image_file_name },
-      'total_clustering': { 'N': str(total_clustering) }
+      'total_clustering': { 'N': str(total_clustering) },
+      'total_isolated_filaments': { 'N': str(len(fil.filaments)) },
+      'location_name': { 'S': event['location_name'] },
+      'day': { 'N': event['day'] },
+      'year': { 'N': event['year'] }
     }
   )
 
@@ -124,8 +138,33 @@ def handler(event):
 
 
 handler(dict(
-  label="china_test",
+  label="new_york_before",
+  year="2019",
+  day="342",
+  hv_coords="h10v04",
+  location_name="an area around New York City"
+))
+
+handler(dict(
+  label="new_york_after",
   year="2020",
-  day="148",
-  hv_coords="h29v06"
+  day="078",
+  hv_coords="h10v04",
+  location_name="an area around New York City"
+))
+
+handler(dict(
+  label="wuhan_after",
+  year="2020",
+  day="083",
+  hv_coords="h29v05",
+  location_name="an area of Hubei province"
+))
+
+handler(dict(
+  label="wuhan_before",
+  year="2019",
+  day="361",
+  hv_coords="h29v05",
+  location_name="an area of Hubei province"
 ))
