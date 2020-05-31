@@ -1,0 +1,7 @@
+* Sources references
+
+The data used to plot the charts came from the following sources:
+
+- [[https://data.london.gov.uk/dataset/coronavirus--covid-19--cases][For the london area chart]]
+- [[https://data.cityofnewyork.us/Health/COVID-19-Daily-Counts-of-Cases-Hospitalizations-an/rc75-m7u3][For the NYC area chart]]
+- [[https://covid19api.com/#details][For the Hubei Province]]
